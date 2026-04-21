@@ -7,6 +7,17 @@ extension String {
 }
 
 let CUSTOM_PARSERS: [CustomOTPParser] = [
+        CustomOTPParser(
+        notes: "Coop Bank",
+        example: "NEVER share this code with ANYONE, not even us. Not you? STOP and call us. Your one-time passcode 123456 authorises GBP 12.34 on card ending 1234.",
+        requiredServiceName: nil,
+        canParseMessage: { message in
+            let words = message.components(separatedBy: " ")
+            return message.contains("NEVER share this code with ANYONE, not even us. Not you? STOP and call us. Your one-time passcode") && words.count > 5 && words[18].isInt
+        }, parseMessage: { message in
+            let words = message.components(separatedBy: " ")
+            return ParsedOTP(service: "coop bank", code: words[18])
+        }),
     CustomOTPParser(
         notes: "Kotak Bank, includes a bunch of numbers",
         example: "123456 is the OTP for transaction of INR 1234.00 on your Kotak Bank Card 1234 at AMAZON PAY INDIA PRIVATET valid for 15 mins. DONT SHARE OTP WITH ANYONE INCLUDING BANK OFFICIALS.",
